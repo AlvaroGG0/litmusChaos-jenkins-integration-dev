@@ -17,3 +17,4 @@ curl "https://raw.githubusercontent.com/AlvaroGG0/litmusChaos-jenkins-integratio
 
 echo "---------- Downloading wait_chaos_finish script ----------"
 curl -O "https://raw.githubusercontent.com/AlvaroGG0/litmusChaos-jenkins-integration-dev/master/scripts/wait_chaos_finish.sh"
+chmod +x "./wait_chaos_finish.sh"
