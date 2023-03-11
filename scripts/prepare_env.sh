@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "Preparing env..."
 
 echo "---------- Installing kubectl ----------"
