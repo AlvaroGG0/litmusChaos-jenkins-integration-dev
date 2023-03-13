@@ -1,0 +1,124 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Agent kube-nnkzq is provisioned from template kube
+Running on kube-nnkzq in /home/jenkins/workspace/pipeline-test
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Prepare env)
+[Pipeline] echo
+Preparing env...
+[Pipeline] sh
++ curl -O https://raw.githubusercontent.com/AlvaroGG0/litmusChaos-jenkins-integration-dev/master/scripts/prepare_env.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   961  100   961    0     0   2542      0 --:--:-- --:--:-- --:--:--  2535
+[Pipeline] sh
++ chmod +x ./prepare_env.sh
+[Pipeline] sh
++ ./prepare_env.sh http://192.168.58.4:31035 jenkins jenkins
+Preparing env...
+---------- Installing kubectl ----------
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ 12 38.3M   12 4999k    0     0  6962k      0  0:00:05 --:--:--  0:00:05 6952k
+ 46 38.3M   46 17.7M    0     0  10.3M      0  0:00:03  0:00:01  0:00:02 10.3M
+ 72 38.3M   72 28.0M    0     0  10.3M      0  0:00:03  0:00:02  0:00:01 10.3M
+ 98 38.3M   98 38.0M    0     0  10.2M      0  0:00:03  0:00:03 --:--:-- 10.2M
+100 38.3M  100 38.3M    0     0  10.2M      0  0:00:03  0:00:03 --:--:-- 10.2M
+---------- Installing & configuring litmusctl ----------
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  2 18.6M    2  483k    0     0   489k      0  0:00:39 --:--:--  0:00:39  488k
+ 14 18.6M   14 2812k    0     0  1399k      0  0:00:13  0:00:02  0:00:11 1399k
+ 27 18.6M   27 5226k    0     0  1769k      0  0:00:10  0:00:02  0:00:08 1768k
+ 40 18.6M   40 7827k    0     0  1969k      0  0:00:09  0:00:03  0:00:06 1969k
+ 52 18.6M   52  9.8M    0     0  2031k      0  0:00:09  0:00:04  0:00:05 2030k
+ 61 18.6M   61 11.4M    0     0  1967k      0  0:00:09  0:00:05  0:00:04 2260k
+ 68 18.6M   68 12.7M    0     0  1872k      0  0:00:10  0:00:06  0:00:04 2064k
+ 74 18.6M   74 13.9M    0     0  1795k      0  0:00:10  0:00:07  0:00:03 1810k
+ 82 18.6M   82 15.4M    0     0  1762k      0  0:00:10  0:00:08  0:00:02 1597k
+ 90 18.6M   90 16.8M    0     0  1735k      0  0:00:11  0:00:09  0:00:02 1443k
+ 98 18.6M   98 18.3M    0     0  1711k      0  0:00:11  0:00:10  0:00:01 1406k
+100 18.6M  100 18.6M    0     0  1706k      0  0:00:11  0:00:11 --:--:-- 1434k
+litmusctl
+---------- Downloading test experiment ----------
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  8394  100  8394    0     0  28551      0 --:--:-- --:--:-- --:--:-- 28551
+---------- Downloading wait_chaos_finish script ----------
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   306  100   306    0     0   1167      0 --:--:-- --:--:-- --:--:--  1163
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deployment)
+[Pipeline] withKubeConfig
+[Pipeline] {
+[Pipeline] echo
+Deploying nginx test...
+[Pipeline] sh
++ ./kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+deployment.apps/nginx-deployment created
+[Pipeline] }
+[kubernetes-cli] kubectl configuration cleaned up
+[Pipeline] // withKubeConfig
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Chaos)
+[Pipeline] withKubeConfig
+[Pipeline] {
+[Pipeline] echo
+Injecting chaos..
+[Pipeline] sh
++ ./litmusctl create chaos-scenario -f ./nginx-pod-delete-test.yaml --project-id=bfe5d049-0ffc-4364-a134-168d6b935e30 --chaos-delegate-id=6339d543-6d23-44f8-bca5-592e1bcfc924
+
+🚀 Chaos Scenario/custom-1678376115 successfully created 🎉
+
+The next run of this Chaos Scenario will be scheduled immediately.
+[Pipeline] sh
++ ./wait_chaos_finish.sh
+Waiting for the chaos experiment to finish...
+Succeeded
+Chaos experiment finished.
+[Pipeline] }
+[kubernetes-cli] kubectl configuration cleaned up
+[Pipeline] // withKubeConfig
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+Cleaning up...
+[Pipeline] withKubeConfig
+[Pipeline] {
+[Pipeline] sh
++ ./kubectl delete -f https://k8s.io/examples/application/deployment.yaml
+deployment.apps "nginx-deployment" deleted
+[Pipeline] }
+[kubernetes-cli] kubectl configuration cleaned up
+[Pipeline] // withKubeConfig
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
