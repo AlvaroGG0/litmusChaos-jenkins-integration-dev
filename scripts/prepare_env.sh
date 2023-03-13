@@ -10,7 +10,7 @@ echo "---------- Installing & configuring litmusctl ----------"
 curl "https://litmusctl-production-bucket.s3.amazonaws.com/litmusctl-linux-amd64-0.15.0.tar.gz" -o litmusctl.tar.gz
 tar -zxvf litmusctl.tar.gz
 chmod +x ./litmusctl
-./litmusctl config set-account --endpoint="http://192.168.58.4:31035" --username="jenkins" --password="jenkins"
+./litmusctl config set-account --endpoint="$1" --username="$2" --password="$3"
 
 echo "---------- Downloading test experiment ----------"
 curl "https://raw.githubusercontent.com/AlvaroGG0/litmusChaos-jenkins-integration-dev/master/experiments/nginx-pod-delete-test.yaml" -o nginx-pod-delete-test.yaml
